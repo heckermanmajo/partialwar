@@ -2,17 +2,27 @@
 
 ## v01 - proof of concept
 
+- Rename Managers to systems
+- Create interfaces for all systems, what they need and 
+  create check function for the interfaces
+
+- move the registration of instances into the new function 
+
 - CLEANUP OF THE CODE
- - remove dead code (commander)
  - add asserts
  - add checks for all data
  - add comments to all functions
  - add type hint comments
 
+CLEANUP 
+- MAKE all input to functions explicit, so we only 
+  pass in what is really needed
+
 - CLEANUP of the readmes 
 - start battle and start campaign bash script
 - Describe game 
 - cleanup of the roadmap
+- each camp object its own file
 
 - Make the code more flexible
 - comment what need to be done for adding multiple factions
