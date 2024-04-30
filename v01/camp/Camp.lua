@@ -93,16 +93,16 @@ function Camp.update(dt)
 
   -- change the view with the arrow keys
   if love.keyboard.isDown("w") then
-    Camp.view_y = Camp.view_y + 10
+    Camp.view_y = Camp.view_y + 700 * dt
   end
   if love.keyboard.isDown("s") then
-    Camp.view_y = Camp.view_y - 10
+    Camp.view_y = Camp.view_y -  700 * dt
   end
   if love.keyboard.isDown("a") then
-    Camp.view_x = Camp.view_x + 10
+    Camp.view_x = Camp.view_x +  700 * dt
   end
   if love.keyboard.isDown("d") then
-    Camp.view_x = Camp.view_x - 10
+    Camp.view_x = Camp.view_x -  700 * dt
   end
 
   NextRoundManager.update(Camp, dt)

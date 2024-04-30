@@ -6,6 +6,11 @@ function MoveToTargetManager.update(Battle, dt)
   -- do not use velocity, just add the speed
   for _, _u in ipairs(Battle.units) do
 
+    -- todo: if my command group is on DEFEND, then i only
+    --       move towards an enemy if the enemy is very near
+    --       otherwise i stay put
+    --       and this only if i am a non-ranged unit
+
     --- @type BattleUnit
     local u = _u
 

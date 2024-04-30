@@ -48,7 +48,7 @@ function ChunkManager.draw(Battle)
 
   for _, _c in ipairs(Battle.chunks) do
 
-    local padding = 200
+    local padding = Battle.chunk_size + 100
 
     --[[local chunk_is_in_view = (
       _c.x + Battle.camera_x_position > 0 and

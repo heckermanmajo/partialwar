@@ -13,7 +13,9 @@
 --- @field public rotation number the rotation of the unit
 --- @field public attacking boolean if the unit is currently attacking
 --- @field public hits_last_second number the number of hits that the unit has done in the last second
-
+--- @field public control_group number the control group that the unit is in. If a unit has no control group
+---               it cannot receive any commands from the player or ai. If a unit has lost its control group
+---               it will just try to attack the nearest unit or if there are too many enemies, it will flee.
 
 BattleUnit = {}
 
@@ -40,6 +42,7 @@ function BattleUnit.new(x, y, type, faction)
     rotation = 0,
     attacking = false,
     hits_last_second = 0,
+    control_group = nil,
   }
   --AttackManager.init(unit)
   BattleUnit.check(unit)

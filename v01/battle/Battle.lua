@@ -6,6 +6,7 @@ require("battle/object/BattleUnitWeapon")
 require("battle/object/BattleProjectile")
 require("battle/object/Effect")
 require("battle/object/Commander")
+require("battle/object/ControlGroup")
 
 local AttackManager = require("battle/manager/AttackManager")
 local ChunkManager = require("battle/manager/ChunkManager")
@@ -23,6 +24,8 @@ local EffectDrawer = require("battle/manager/EffectDrawer")
 local ProjectileManager = require("battle/manager/ProjectileManager")
 local DrawBattleInfo = require("battle/manager/DrawBattleInfo")
 local MinimapDrawer = require("battle/manager/MinimapDrawer")
+local ChunkSpawnerAndUnitController = require("battle/manager/ChunkSpawnerAndUnitController")
+local DrawSelectedCommandGroupsOutline = require("battle/manager/DrawSelectedCommandGroupsOutline")
 
 --- @class Battle
 --- @field config BattleConfig
@@ -45,6 +48,7 @@ Battle = {
   chunk_map = {},
   effects = {},
   projectiles = {},
+  control_groups = {},
   player_commander = Commander.new(100,600, 300),
   world_width = 256 * 30,
   world_height = 256 * 30,
@@ -52,6 +56,7 @@ Battle = {
   camera_x_position = 0,
   camera_y_position = 0,
   spawn_delay = 3,
+  currently_selected_control_groups = {},
   factions = {
     player = BattleFaction.new("player", { 0, 0, 255 / 255 }, true, 500),
     enemy = BattleFaction.new("enemy", { 255 / 255, 0, 0 }, false, 500),
@@ -193,7 +198,8 @@ function Battle.update(dt)
 
 
   --AttackManager.update(Battle, dt)
-  SpawnManager.update(Battle, dt)
+  --SpawnManager.update(Battle, dt)
+  ChunkSpawnerAndUnitController.update(Battle, dt)
   AIFactionManager.update(Battle, dt)
   CollisionManager.collide(Battle, dt)
   MovingManager.move(Battle, dt)
@@ -205,6 +211,7 @@ function Battle.update(dt)
   EffectDrawer.update(Battle, dt)
   --CommanderManager.update(Battle, dt)
   ProjectileManager.update(Battle, dt)
+
 
   local unit_num = 0
   for _, c in ipairs(Battle.chunks) do
@@ -263,5 +270,7 @@ function Battle.draw()
   DrawBattleInfo.draw_battle_info(Battle)
 
   MinimapDrawer.draw(Battle)
+  ChunkSpawnerAndUnitController.draw(Battle)
+  DrawSelectedCommandGroupsOutline.draw(Battle)
 
 end
