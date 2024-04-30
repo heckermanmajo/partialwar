@@ -9,16 +9,28 @@ function ProjectileManager.draw(Battle)
     --- @type BattleProjectile
     local projectile = _projectile
 
-    love.graphics.draw(
-      projectile.weapon_type.projectile_image,
-      projectile.x,
-      projectile.y,
-      projectile.rotation + math.pi / 2,
-      1,
-      1,
-      projectile.weapon_type.projectile_image:getWidth() / 2,
-      projectile.weapon_type.projectile_image:getHeight() / 2
+    local padding = 200
+    local in_view = (
+      projectile.x + Battle.camera_x_position > -padding and
+      projectile.x + Battle.camera_x_position < love.graphics.getWidth() + padding and
+      projectile.y + Battle.camera_y_position > -padding and
+      projectile.y + Battle.camera_y_position < love.graphics.getHeight() + padding
     )
+
+    if in_view then
+
+      love.graphics.draw(
+        projectile.weapon_type.projectile_image,
+        projectile.x + Battle.camera_x_position,
+        projectile.y + Battle.camera_y_position,
+        projectile.rotation + math.pi / 2,
+        1,
+        1,
+        projectile.weapon_type.projectile_image:getWidth() / 2,
+        projectile.weapon_type.projectile_image:getHeight() / 2
+      )
+
+    end
 
 
   end

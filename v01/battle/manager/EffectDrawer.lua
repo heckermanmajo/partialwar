@@ -22,8 +22,8 @@ function EffectDrawer.draw(battle)
     -- todo: make origin correction better
     love.graphics.draw(
       effect.image,
-      effect.x + 32,
-      effect.y + 32,
+      effect.x + 32 + battle.camera_x_position,
+      effect.y + 32 + battle.camera_y_position,
       effect.rotation,
       1,
       1,

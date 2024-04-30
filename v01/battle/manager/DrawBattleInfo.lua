@@ -27,6 +27,8 @@ function DrawBattleInfo.draw_battle_info(battle)
 
   love.graphics.print("Player-Units: " ..player_units, 10, 30)
   love.graphics.print("Enemy-Units: " ..enemy_units, 10, 50)
+  -- draw fps here
+  love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 10)
 
   love.graphics.setColor(1, 1, 1)
 

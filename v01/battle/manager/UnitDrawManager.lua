@@ -7,8 +7,21 @@ local shield_two_image = love.graphics.newImage("battle/res/square_shield.png")
 function UnitDrawManager.draw(Battle)
 
   for _, _unit in ipairs(Battle.units) do
+
     --- @type BattleUnit
     local unit = _unit
+
+    local padding = 200
+    local in_view  = (
+      unit.x + Battle.camera_x_position > -padding and
+      unit.x + Battle.camera_x_position < love.graphics.getWidth() + padding and
+      unit.y + Battle.camera_y_position > -padding and
+      unit.y + Battle.camera_y_position < love.graphics.getHeight() + padding
+    )
+
+    if not in_view then
+      goto continue
+    end
 
     local image = unit.type.images[unit.faction.name]
     local rotation = unit.rotation
@@ -16,8 +29,8 @@ function UnitDrawManager.draw(Battle)
     local origin_correction = unit_size / 2
     love.graphics.draw(
       image, -- image
-      unit.x + origin_correction, -- x
-      unit.y + origin_correction, -- y
+      unit.x + origin_correction + Battle.camera_x_position, -- x
+      unit.y + origin_correction + Battle.camera_y_position, -- y
       rotation, -- rotation
       1, -- scale x
       1, -- scale y
@@ -63,8 +76,8 @@ function UnitDrawManager.draw(Battle)
 
     love.graphics.draw(
       weapon_image, -- image
-      unit.x - pixel_to_draw_the_spear_further_x + origin_correction, -- x
-      unit.y - pixel_to_draw_the_spear_further_y + origin_correction, -- y
+      unit.x - pixel_to_draw_the_spear_further_x + origin_correction + Battle.camera_x_position, -- x
+      unit.y - pixel_to_draw_the_spear_further_y + origin_correction + Battle.camera_y_position, -- y
       weapon_rotation, -- rotation
       1, -- scale x
       1, -- scale y
@@ -77,8 +90,8 @@ function UnitDrawManager.draw(Battle)
     elseif unit.type.shield_level == 1 then
       love.graphics.draw(
         shield_one_image, -- image
-        unit.x + origin_correction, -- x
-        unit.y + origin_correction, -- y
+        unit.x + origin_correction+ Battle.camera_x_position, -- x
+        unit.y + origin_correction+ Battle.camera_y_position, -- y
         rotation, -- rotation
         1, -- scale x
         1, -- scale y
@@ -88,8 +101,8 @@ function UnitDrawManager.draw(Battle)
     elseif unit.type.shield_level == 2 then
       love.graphics.draw(
         shield_two_image, -- image
-        unit.x + origin_correction, -- x
-        unit.y + origin_correction, -- y
+        unit.x + origin_correction+ Battle.camera_x_position, -- x
+        unit.y + origin_correction+ Battle.camera_y_position, -- y
         rotation, -- rotation
         1, -- scale x
         1, -- scale y
@@ -101,8 +114,8 @@ function UnitDrawManager.draw(Battle)
     --- draw a health bar above the unit
     local health_bar_width = unit_size
     local health_bar_height = 5
-    local health_bar_x = unit.x
-    local health_bar_y = unit.y - health_bar_height - 2
+    local health_bar_x = unit.x + Battle.camera_x_position
+    local health_bar_y = unit.y - health_bar_height - 2 + Battle.camera_y_position
     local health_bar_fill_width = health_bar_width * (unit.hp / 100)
 
     if unit.hp < 100 then
@@ -121,6 +134,8 @@ function UnitDrawManager.draw(Battle)
       --love.graphics.setColor(255 / 255, 255 / 255, 255 / 255)
 
     end
+
+    ::continue::
 
   end
 

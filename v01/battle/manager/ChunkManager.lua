@@ -8,7 +8,6 @@
 --- @field get_chunk_by_position fun(x: number, y: number, Battle: Battle):Chunk
 local ChunkManager = {}
 
-
 --- Initializes the chunks for the battle.
 --- @param Battle Battle
 function ChunkManager.init_chunks(Battle)
@@ -38,7 +37,6 @@ function ChunkManager.init_chunks(Battle)
 
 end
 
-
 --- Draws the chunks.
 --- @param Battle Battle
 --- @return void
@@ -49,11 +47,31 @@ function ChunkManager.draw(Battle)
   end
 
   for _, _c in ipairs(Battle.chunks) do
-    --- @type Chunk
-    local c = _c
-    love.graphics.rectangle("line", c.x, c.y, c.size, c.size)
-    -- draw the number of units in the chunk at the left top corner
-    love.graphics.print(#c.units, c.x, c.y)
+
+    local padding = 200
+
+    --[[local chunk_is_in_view = (
+      _c.x + Battle.camera_x_position > 0 and
+      _c.x + Battle.camera_x_position < love.graphics.getWidth() and
+      _c.y + Battle.camera_y_position > 0 and
+      _c.y + Battle.camera_y_position < love.graphics.getHeight()
+    )]]
+    -- add padding to the chunks
+    local chunk_is_in_view = (
+      _c.x + Battle.camera_x_position > -padding and
+      _c.x + Battle.camera_x_position < love.graphics.getWidth() + padding and
+      _c.y + Battle.camera_y_position > -padding and
+      _c.y + Battle.camera_y_position < love.graphics.getHeight() + padding
+    )
+
+
+    if chunk_is_in_view then
+      --- @type Chunk
+      local c = _c
+      love.graphics.rectangle("line", c.x + Battle.camera_x_position, c.y + Battle.camera_y_position, c.size, c.size)
+      -- draw the number of units in the chunk at the left top corner
+      love.graphics.print(#c.units, c.x + Battle.camera_x_position, c.y + Battle.camera_y_position)
+    end
   end
 
 end
@@ -72,7 +90,6 @@ function ChunkManager.remove_unit_from_chunk(unit, chunk)
   end
 
 end
-
 
 --- Updates the chunk value of all units in a given battle.
 --- @param Battle Battle
@@ -120,7 +137,6 @@ function ChunkManager.get_chunk_by_position(x, y, Battle)
 
 end
 
-
 --- Returns the neighbour chunks of a given chunk.
 --- @param chunk Chunk
 --- @param Battle Battle
@@ -142,7 +158,7 @@ function ChunkManager.get_neighbour_chunks(chunk, Battle)
         end
         local neighbour_chunk = Battle.chunk_map[chunk_x + x][chunk_y + y]
         table.insert(neighbour_chunks, neighbour_chunk)
-        ::continue::
+        :: continue ::
       end
     end
   end
@@ -150,6 +166,5 @@ function ChunkManager.get_neighbour_chunks(chunk, Battle)
   return neighbour_chunks
 
 end
-
 
 return ChunkManager

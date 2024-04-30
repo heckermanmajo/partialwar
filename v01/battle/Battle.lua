@@ -22,6 +22,7 @@ local DeadUnitRemover = require("battle/manager/DeadUnitRemover")
 local EffectDrawer = require("battle/manager/EffectDrawer")
 local ProjectileManager = require("battle/manager/ProjectileManager")
 local DrawBattleInfo = require("battle/manager/DrawBattleInfo")
+local MinimapDrawer = require("battle/manager/MinimapDrawer")
 
 --- @class Battle
 --- @field config BattleConfig
@@ -31,6 +32,11 @@ local DrawBattleInfo = require("battle/manager/DrawBattleInfo")
 --- @field world_width number
 --- @field world_height number
 --- @field chunk_size number
+--- @field camera_x_position number
+--- @field camera_y_position number
+--- @field spawn_delay number
+--- @field factions table<string, BattleFaction>
+--- @field player_commander Commander
 Battle = {
   config = nil,
   debug = true,
@@ -40,9 +46,11 @@ Battle = {
   effects = {},
   projectiles = {},
   player_commander = Commander.new(100,600, 300),
-  world_width = love.graphics.getWidth(),
-  world_height = love.graphics.getHeight(),
-  chunk_size = love.graphics.getWidth() / 10,
+  world_width = 256 * 30,
+  world_height = 256 * 30,
+  chunk_size = 256,
+  camera_x_position = 0,
+  camera_y_position = 0,
   spawn_delay = 3,
   factions = {
     player = BattleFaction.new("player", { 0, 0, 255 / 255 }, true, 500),
@@ -167,6 +175,23 @@ end
 
 -- Update and draw functions
 function Battle.update(dt)
+
+  -- change the view with the arrow keys
+  if love.keyboard.isDown("w") then
+    Battle.camera_y_position = Battle.camera_y_position + 600 * dt
+  end
+  if love.keyboard.isDown("s") then
+    Battle.camera_y_position = Battle.camera_y_position - 600 * dt
+  end
+  if love.keyboard.isDown("a") then
+    Battle.camera_x_position = Battle.camera_x_position + 600 * dt
+  end
+  if love.keyboard.isDown("d") then
+    Battle.camera_x_position = Battle.camera_x_position - 600 * dt
+  end
+
+
+
   --AttackManager.update(Battle, dt)
   SpawnManager.update(Battle, dt)
   AIFactionManager.update(Battle, dt)
@@ -236,5 +261,7 @@ function Battle.draw()
   CommandPointDrawManager.draw(Battle)
 
   DrawBattleInfo.draw_battle_info(Battle)
+
+  MinimapDrawer.draw(Battle)
 
 end
