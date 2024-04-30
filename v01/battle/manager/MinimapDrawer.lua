@@ -16,6 +16,9 @@ function MinimapDrawer.draw(battle)
   height = height * scale
   local display_size = scale
 
+  local screen_x = love.graphics.getWidth() - width - 30
+  local screen_y = love.graphics.getHeight() - height - 30
+
   for _, chunk in ipairs(battle.chunks) do
 
     local x = chunk.x / chunk.size
@@ -52,22 +55,30 @@ function MinimapDrawer.draw(battle)
       color = { 1, 0, 0 }
     end
 
-    local screen_x = love.graphics.getWidth() - width - 30
-    local screen_y = love.graphics.getHeight() - height - 30
+    if chunk.is_checkpoint then
+      -- draw a yellow line around the checkpoint
+      love.graphics.setColor(1, 1, 0)
+      love.graphics.rectangle("line", x * display_size + screen_x-1, y * display_size + screen_y-1, 4+2, 4+2)
+
+      -- todo
+
+    end
+
+
     love.graphics.setColor(color)
     love.graphics.rectangle("fill", x * display_size +  screen_x, y * display_size + screen_y, 4, 4)
 
-    -- draw rhe current screen view as a small rect on the minimap
+  end
 
-    do
-      local start_position_x = screen_x - battle.camera_x_position / battle.chunk_size * scale
-      local width = love.graphics.getWidth() / battle.chunk_size * scale
-      local start_position_y = screen_y - battle.camera_y_position / battle.chunk_size * scale
-      local height = love.graphics.getHeight() / battle.chunk_size * scale
-      love.graphics.setColor(1, 1, 1)
-      love.graphics.rectangle("line", start_position_x, start_position_y, width, height)
-    end
+  -- draw rhe current screen view as a small rect on the minimap
 
+  do
+    local start_position_x = screen_x - battle.camera_x_position / battle.chunk_size * scale
+    local width = love.graphics.getWidth() / battle.chunk_size * scale
+    local start_position_y = screen_y - battle.camera_y_position / battle.chunk_size * scale
+    local height = love.graphics.getHeight() / battle.chunk_size * scale
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.rectangle("line", start_position_x, start_position_y, width, height)
   end
 
   love.graphics.setColor(1, 1, 1)

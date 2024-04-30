@@ -1,0 +1,4 @@
+--- Checkpoint can be conquered by units on the chunk
+--- changes in the checkpoint ratio of player and enemy
+--- will change the spawn time of units
+---> value for spawn time per faction needed ...

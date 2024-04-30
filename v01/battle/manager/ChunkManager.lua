@@ -25,10 +25,19 @@ function ChunkManager.init_chunks(Battle)
     for y = 0, Battle.world_height, chunk_size do
 
       local chunk = Chunk.new(x, y, chunk_size)
+
+      local rand_of_100 = love.math.random(0, 100)
+
+      if rand_of_100 < 2 then
+        chunk.is_checkpoint = true
+      end
+
       table.insert(Battle.chunks, chunk)
+
       if not Battle.chunk_map[x] then
         Battle.chunk_map[x] = {}
       end
+
       Battle.chunk_map[x][y] = chunk
 
     end
@@ -68,10 +77,19 @@ function ChunkManager.draw(Battle)
     if chunk_is_in_view then
       --- @type Chunk
       local c = _c
+
+      if c.is_checkpoint then
+        -- draw a yellow background for the checkpoint
+        love.graphics.setColor(1, 1, 0, 0.2)
+        love.graphics.rectangle("fill", c.x + Battle.camera_x_position, c.y + Battle.camera_y_position, c.size, c.size)
+        love.graphics.setColor(1, 1, 1)
+      end
+
       love.graphics.rectangle("line", c.x + Battle.camera_x_position, c.y + Battle.camera_y_position, c.size, c.size)
       -- draw the number of units in the chunk at the left top corner
       love.graphics.print(#c.units, c.x + Battle.camera_x_position, c.y + Battle.camera_y_position)
     end
+
   end
 
 end

@@ -1,33 +1,31 @@
 --- @class ControlGroup Collection of units that belong together and can be controlled together.
 ---        as a game mechanic: if the organisation of the control group reaches 0, the control
 ---        group is destroyed and units move randomly around.
---- @field units BattleUnit[]
---- @field organisation number
+--- @field units BattleUnit[] The units that belong to the control group.
+--- @field organisation number The organisation of the control group. If it reaches 0, the control group is destroyed.
+--- @field target_chunk Chunk The chunk that the control group is currently targeting
+--- @field mode string "idle", "searching", "engaged", "on_the_way"
+--- @field last_mode string The last mode of the control group
+--- @field faction BattleFaction The faction that the control group belongs to
+--- @field center_x number Units will follow this "center-leader" point in a relative distance
+--- @field center_y number Units will follow this "center-leader" point in a relative distance
 ControlGroup = {}
 
--- control groups dont define targets to attack
--- but chunks to hold
--- also together movement
--- units will not venture out to far from a control group
--- control groups have a middle-point
--- all n seconds a unit tries to get back near to the middle point of the control group
--- the control group does not need to stand exactly on a chunk only near to it
--- how to have formations??
-
--- formations -> this is the big thing just spawn formations
--- charge would remove the controllability but all units would press forward
--- engaged in fight -> no control
-
-
-function ControlGroup.new()
+--- Creates a new control group.
+--- @param faction BattleFaction
+function ControlGroup.new(faction)
 
   local self = setmetatable({}, {__index = ControlGroup})
 
-  self.faction = nil
+  self.faction = faction
   self.units = {}
   self.organisation = 100
   self.target_chunk = nil
-  self.hold_position = nil
+  self.mode = "idle" -- "searching", "engaged", "idle", "on_the_way"
+  self.last_mode = "idle"
+  self.center_x = 0
+  self.center_y = 0
+  self.slowest_unit_speed = 999999999
 
   table.insert(Battle.control_groups, self)
 

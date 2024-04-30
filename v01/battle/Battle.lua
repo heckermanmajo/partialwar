@@ -40,6 +40,7 @@ local DrawSelectedCommandGroupsOutline = require("battle/manager/DrawSelectedCom
 --- @field spawn_delay number
 --- @field factions table<string, BattleFaction>
 --- @field player_commander Commander
+--- @field control_groups table<number, ControlGroup>
 Battle = {
   config = nil,
   debug = true,
@@ -194,8 +195,6 @@ function Battle.update(dt)
   if love.keyboard.isDown("d") then
     Battle.camera_x_position = Battle.camera_x_position - 600 * dt
   end
-
-
 
   --AttackManager.update(Battle, dt)
   --SpawnManager.update(Battle, dt)
