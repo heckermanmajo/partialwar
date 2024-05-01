@@ -21,8 +21,8 @@ function DeadBodyRemover.update(Battle, dt)
 
     local u = Battle.units[i]
 
-    if u.target_unit and u.target_unit.hp <= 0 then
-      u.target_unit = nil
+    if u.target and u.target.hp <= 0 then
+      u.target = nil
     end
 
   end

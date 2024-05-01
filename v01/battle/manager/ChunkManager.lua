@@ -68,11 +68,10 @@ function ChunkManager.draw(Battle)
     -- add padding to the chunks
     local chunk_is_in_view = (
       _c.x + Battle.camera_x_position > -padding and
-      _c.x + Battle.camera_x_position < love.graphics.getWidth() + padding and
-      _c.y + Battle.camera_y_position > -padding and
-      _c.y + Battle.camera_y_position < love.graphics.getHeight() + padding
+        _c.x + Battle.camera_x_position < love.graphics.getWidth() + padding and
+        _c.y + Battle.camera_y_position > -padding and
+        _c.y + Battle.camera_y_position < love.graphics.getHeight() + padding
     )
-
 
     if chunk_is_in_view then
       --- @type Chunk
@@ -80,7 +79,13 @@ function ChunkManager.draw(Battle)
 
       if c.is_checkpoint then
         -- draw a yellow background for the checkpoint
-        love.graphics.setColor(1, 1, 0, 0.2)
+        if c.current_owner == Battle.factions.player then
+          love.graphics.setColor(0, 1, 0, 0.2)
+        elseif c.current_owner == Battle.factions.enemy then
+          love.graphics.setColor(1, 0, 0, 0.2)
+        else
+          love.graphics.setColor(1, 1, 0, 0.2)
+        end
         love.graphics.rectangle("fill", c.x + Battle.camera_x_position, c.y + Battle.camera_y_position, c.size, c.size)
         love.graphics.setColor(1, 1, 1)
       end

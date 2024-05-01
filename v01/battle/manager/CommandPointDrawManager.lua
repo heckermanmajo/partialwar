@@ -14,12 +14,11 @@ function CommandPointDrawManager.draw(Battle)
   love.graphics.rectangle("fill", 0, 100, 200, 60)
 
   love.graphics.setColor(player.color)
-  love.graphics.print("Player: " .. player.command_points .. "( til next spawn: "..time_til_next_command ..")", 10, 110)
+  love.graphics.print("Player: " .. player.command_points .. "( SPAWNTIME: ".. Battle.player_spawn_time ..")", 10, 110)
 
   -- make a gray rectangle as background
   love.graphics.setColor(enemy.color)
-  love.graphics.print("Enemy: " .. enemy.command_points, 10, 130)
-
+  love.graphics.print("Enemy: " .. enemy.command_points .. "( SPAWNTIME: ".. Battle.enemy_spawn_time ..")", 10, 130)
 
   -- set back to white
   love.graphics.setColor(255/255, 255/255, 255/255)

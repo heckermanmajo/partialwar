@@ -26,6 +26,11 @@ local DrawBattleInfo = require("battle/manager/DrawBattleInfo")
 local MinimapDrawer = require("battle/manager/MinimapDrawer")
 local ChunkSpawnerAndUnitController = require("battle/manager/ChunkSpawnerAndUnitController")
 local DrawSelectedCommandGroupsOutline = require("battle/manager/DrawSelectedCommandGroupsOutline")
+local ControlGroupMoveToTarget = require("battle/manager/ControlGroupMoveToTarget")
+local SelectedGroupInfoManager = require("battle/manager/SelectedGroupInfoManager")
+local UnitsFormationManager = require("battle/manager/UnitsFormationManager")
+local CheckPointConquerManager = require("battle/manager/CheckPointConquerManager")
+local CalculateSpawnTimeManager = require("battle/manager/CalculateSpawnTimeManager")
 
 --- @class Battle
 --- @field config BattleConfig
@@ -41,6 +46,9 @@ local DrawSelectedCommandGroupsOutline = require("battle/manager/DrawSelectedCom
 --- @field factions table<string, BattleFaction>
 --- @field player_commander Commander
 --- @field control_groups table<number, ControlGroup>
+--- @field currently_selected_control_groups table<number, ControlGroup>
+--- @field player_spawn_time number
+--- @field enemy_spawn_time number
 Battle = {
   config = nil,
   debug = true,
@@ -58,6 +66,8 @@ Battle = {
   camera_y_position = 0,
   spawn_delay = 3,
   currently_selected_control_groups = {},
+  player_spawn_time = 3,
+  enemy_spawn_time = 3,
   factions = {
     player = BattleFaction.new("player", { 0, 0, 255 / 255 }, true, 500),
     enemy = BattleFaction.new("enemy", { 255 / 255, 0, 0 }, false, 500),
@@ -208,9 +218,12 @@ function Battle.update(dt)
   DeadUnitRemover.update(Battle, dt)
   AttackManager.update(Battle, dt)
   EffectDrawer.update(Battle, dt)
-  --CommanderManager.update(Battle, dt)
   ProjectileManager.update(Battle, dt)
+  ControlGroupMoveToTarget.update(Battle, dt)
+  UnitsFormationManager.update(Battle, dt)
 
+  CheckPointConquerManager.update(Battle, dt)
+  CalculateSpawnTimeManager.update(Battle, dt)
 
   local unit_num = 0
   for _, c in ipairs(Battle.chunks) do
@@ -271,5 +284,6 @@ function Battle.draw()
   MinimapDrawer.draw(Battle)
   ChunkSpawnerAndUnitController.draw(Battle)
   DrawSelectedCommandGroupsOutline.draw(Battle)
+  SelectedGroupInfoManager.draw(Battle)
 
 end

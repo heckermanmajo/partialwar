@@ -1,18 +1,30 @@
 local MoveToTargetManager = {}
 
+--- Update the units to move towards their target - the target is an enemy unit
 --- @param Battle Battle
+--- @param dt number
 function MoveToTargetManager.update(Battle, dt)
 
   -- do not use velocity, just add the speed
   for _, _u in ipairs(Battle.units) do
 
-    -- todo: if my command group is on DEFEND, then i only
-    --       move towards an enemy if the enemy is very near
-    --       otherwise i stay put
-    --       and this only if i am a non-ranged unit
-
     --- @type BattleUnit
     local u = _u
+
+    -- if this unit is part of a control group and the control_group
+    -- is not engaged in battle, we dont move the unit to a "target"
+    -- since this unit should not have a target
+    if u.control_group and u.control_group.mode ~= "engaged" then
+
+      -- if the unit has a target, we remove it, since the control group
+      -- is not engaged in battle
+      if u.target then
+        u.target = nil
+      end
+
+      goto continue
+
+    end
 
     if u.target then
       local target_x = u.target.x
@@ -37,8 +49,7 @@ function MoveToTargetManager.update(Battle, dt)
         -- target
         local rotation_to_target = math.atan2(dy, dx)
         u.rotation = rotation_to_target
-        u.rotation = u.rotation + math.pi/2
-
+        u.rotation = u.rotation + math.pi / 2
 
         local speed = u.type.speed
         if dx < 0 then
@@ -56,13 +67,11 @@ function MoveToTargetManager.update(Battle, dt)
       end
     end
 
+    :: continue ::
+
   end
 
 
-  
 end
-
-
-
 
 return MoveToTargetManager

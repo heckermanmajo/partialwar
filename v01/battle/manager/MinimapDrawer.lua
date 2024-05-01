@@ -57,7 +57,14 @@ function MinimapDrawer.draw(battle)
 
     if chunk.is_checkpoint then
       -- draw a yellow line around the checkpoint
-      love.graphics.setColor(1, 1, 0)
+      local check_point_color = { 1, 1, 0 }
+      if chunk.current_owner == Battle.factions.player then
+        check_point_color = { 0, 1, 0 }
+      end
+      if chunk.current_owner == Battle.factions.enemy then
+        check_point_color = { 1, 0.3, 0.3 }
+      end
+      love.graphics.setColor(check_point_color)
       love.graphics.rectangle("line", x * display_size + screen_x-1, y * display_size + screen_y-1, 4+2, 4+2)
 
       -- todo

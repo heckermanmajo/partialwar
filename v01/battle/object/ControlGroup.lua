@@ -9,6 +9,7 @@
 --- @field faction BattleFaction The faction that the control group belongs to
 --- @field center_x number Units will follow this "center-leader" point in a relative distance
 --- @field center_y number Units will follow this "center-leader" point in a relative distance
+--- @field slowest_unit_speed number The speed of the slowest unit in the control group
 ControlGroup = {}
 
 --- Creates a new control group.

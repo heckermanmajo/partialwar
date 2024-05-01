@@ -1,6 +1,14 @@
 # Roadmap
 
 ## RTS battles in nice
+- select all groups on screen with q
+- add map control mode
+- add a spawn-queue at the top of the screen
+- draw icon function for unit types -> for ui and queue
+- fallback to the left side for units
+- conquer checkpoints on the map
+- add back the command point-add mages 
+- add giants
 
 ## Smart campaign map ai 
 

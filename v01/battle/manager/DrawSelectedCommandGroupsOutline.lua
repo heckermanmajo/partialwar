@@ -24,7 +24,34 @@ function DrawSelectedCommandGroupsOutline.draw(Battle)
       )
     end
     love.graphics.setColor(1, 1, 1)
+
+    -- draw a red rect around the target chunk
+    if command_group.target_chunk then
+      love.graphics.setColor(1, 0, 0)
+      love.graphics.rectangle(
+        "line",
+        command_group.target_chunk.x + Battle.camera_x_position,
+        command_group.target_chunk.y + Battle.camera_y_position,
+        command_group.target_chunk.size,
+        command_group.target_chunk.size
+      )
+      love.graphics.setColor(1, 1, 1)
+    end
+
+    -- draw a read rect around the center of the command group
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle(
+      "fill",
+      command_group.center_x + Battle.camera_x_position,
+      command_group.center_y + Battle.camera_y_position,
+      30,
+      30
+    )
+
+    love.graphics.setColor(1, 1, 1)
+
   end
+
 
 end
 

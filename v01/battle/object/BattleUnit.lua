@@ -4,7 +4,7 @@
 --- @field public type BattleUnitType the type of the unit
 --- @field public faction BattleFaction the faction of the unit
 --- @field public hp number the current hit points of the unit
---- @field public target_unit BattleUnit the unit that this unit is attacking or following
+--- @field public target BattleUnit the unit that this unit is attacking or following
 --- @field public time_since_attack number the time since the last attack
 --- @field public time_until_next_attack_update number the time since the last attack update
 --- @field public current_chunk Chunk the chunk that the unit is currently in
@@ -35,7 +35,7 @@ function BattleUnit.new(x, y, type, faction)
     type = type,
     faction = faction,
     hp = 100,
-    target_unit = nil,
+    target = nil,
     time_since_attack = 0,
     x_velocity = 0,
     y_velocity = 0,

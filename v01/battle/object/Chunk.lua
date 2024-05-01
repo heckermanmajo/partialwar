@@ -4,7 +4,7 @@
 --- @field public size number
 --- @field public units table<number, BattleUnit>
 --- @field public is_checkpoint boolean
---- @field public spawn_point_for BattleFaction|nil
+--- @field public current_owner Faction|nil
 Chunk = {}
 Chunk.new = function(x, y, size)
   return {
@@ -13,6 +13,6 @@ Chunk.new = function(x, y, size)
     size = size,
     units = {},
     is_checkpoint = false,
-    spawn_point_for = nil
+    current_owner = nil
   }
 end

@@ -1,5 +1,5 @@
-local get_chunk_by_position = require("v01/battle/composition/get_chunk_by_position")
-local get_chunks_around_me = require("v01/battle/composition/get_chunks_around_me")
+--local get_chunk_by_position = require("v01/battle/composition/get_chunk_by_position")
+--local get_chunks_around_me = require("v01/battle/composition/get_chunks_around_me")
 --- A control group can have a move target.
 --- The group as a whole will move towards the target.
 --- If there is an enemy between the group and the target,
@@ -11,6 +11,38 @@ local get_chunks_around_me = require("v01/battle/composition/get_chunks_around_m
 
 
 local ControlGroupMoveToTarget = {}
+
+local function has_enemies_in_reach(control_group, Battle)
+
+  -- todo: update this for ranged units, so they attack from a distance
+
+  for _, unit in ipairs(control_group.units) do
+
+    for _, enemy_unit in ipairs(Battle.units) do
+
+      assert(enemy_unit.faction, "enemy_unit.faction is nil")
+      assert(control_group.faction, "control_group.faction is nil")
+
+      if enemy_unit.faction ~= control_group.faction then
+
+        local distance_to_enemy = math.sqrt(
+          (unit.x - enemy_unit.x) ^ 2 +
+            (unit.y - enemy_unit.y) ^ 2
+        )
+
+        if distance_to_enemy < 300 then
+          return true
+        end
+
+      end
+
+    end
+
+  end
+
+  return false
+
+end
 
 --- @param Battle Battle
 --- @param dt number
@@ -47,11 +79,11 @@ function ControlGroupMoveToTarget.update(Battle, dt)
 
       for _, unit in ipairs(control_group.units) do
 
-        if unit.target_unit then
+        if unit.target then
 
           local distance_to_target = math.sqrt(
-            (unit.x - unit.target_unit.x) ^ 2 +
-              (unit.y - unit.target_unit.y) ^ 2
+            (unit.x - unit.target.x) ^ 2 +
+              (unit.y - unit.target.y) ^ 2
           )
 
           local max_distance
@@ -91,10 +123,11 @@ function ControlGroupMoveToTarget.update(Battle, dt)
             (control_group.center_y - chunk.y) ^ 2
         )
 
-        if chunk.is_checkpoint
-          and chunk.faction ~= control_group.faction
-          and distance_to_chunk < smallest_distance
-        then
+        if (
+          chunk.is_checkpoint
+            and chunk.current_owner ~= control_group.faction
+            and distance_to_chunk < smallest_distance
+        ) then
           next_target = chunk
           smallest_distance = distance_to_chunk
         end
@@ -110,26 +143,80 @@ function ControlGroupMoveToTarget.update(Battle, dt)
     end
 
     if control_group.mode == "idle" then
-      -- we do nothing
+      -- we are on the lookout for enemy units
+
+
+      if has_enemies_in_reach(control_group, Battle) then
+        control_group.last_mode = "idle"
+        control_group.mode = "engaged"
+      end
+
+
     end
 
+    control_group.__next_move_to_target_update = love.math.random(0, 400) / 100
+
+    :: continue ::
+
     if control_group.mode == "on_the_way" then
+
+      if has_enemies_in_reach(control_group, Battle) then
+        control_group.last_mode = "on_the_way"
+        control_group.mode = "engaged"
+      end
+
+      assert(type(control_group.slowest_unit_speed) == "number", "control_group.slowest_unit_speed is not a number")
+
+      if control_group.slowest_unit_speed > 1000 then
+        -- this happens in the first few seconds after spawn
+        -- since the slowest unit speed is not yet calculated
+        control_group.slowest_unit_speed = 100
+      end
 
       local distance_to_target = math.sqrt(
         (control_group.center_x - control_group.target_chunk.x) ^ 2 +
           (control_group.center_y - control_group.target_chunk.y) ^ 2
       )
 
-      if distance_to_target > 100 then
+      if distance_to_target > 40 then
 
         local rotation = math.atan2(
           control_group.target_chunk.y - control_group.center_y,
           control_group.target_chunk.x - control_group.center_x
         )
 
-        local delta_x = math.cos(rotation) * control_group.slowest_unit_speed
-        local delta_y = math.sin(rotation) * control_group.slowest_unit_speed
+        local x_direction
+        local y_direction
 
+        if control_group.center_x < control_group.target_chunk.x then
+          x_direction = 1
+        else
+          x_direction = -1
+        end
+
+        if control_group.center_y < control_group.target_chunk.y then
+          y_direction = 1
+        else
+          y_direction = -1
+        end
+
+        local delta_x = x_direction * control_group.slowest_unit_speed * dt
+        local delta_y = y_direction * control_group.slowest_unit_speed * dt
+
+        if delta_x < -100 then
+          print("delta_x is too small" .. delta_x)
+          print("control_group.slowest_unit_speed" .. control_group.slowest_unit_speed)
+        end
+
+        if delta_x > 100 then
+          print("delta_y is too big")
+        end
+
+        control_group.center_x = control_group.center_x + delta_x
+        control_group.center_y = control_group.center_y + delta_y
+
+        -- move each unit
+        -- all units try to keep the same distance to the center point
         for _, unit in ipairs(control_group.units) do
           unit.rotation = rotation + math.pi / 2
           unit.x = unit.x + delta_x
@@ -152,11 +239,8 @@ function ControlGroupMoveToTarget.update(Battle, dt)
       end
     end
 
-    control_group.__next_move_to_target_update = love.math.random(0, 400) / 100
-
-    :: continue ::
-
   end
+
 
 end
 
