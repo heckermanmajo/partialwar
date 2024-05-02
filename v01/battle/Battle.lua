@@ -7,11 +7,12 @@ require("battle/object/BattleProjectile")
 require("battle/object/Effect")
 require("battle/object/Commander")
 require("battle/object/ControlGroup")
+require("battle/object/SpawnQueueEntry")
 
 local AttackManager = require("battle/manager/AttackManager")
 local ChunkManager = require("battle/manager/ChunkManager")
 local DebugViewManager = require("battle/manager/DebugViewManager")
-local SpawnManager = require("battle/manager/SpawnManager")
+--local SpawnManager = require("battle/manager/SpawnManager")
 local UnitDrawManager = require("battle/manager/UnitDrawManager")
 local CommandPointDrawManager = require("battle/manager/CommandPointDrawManager")
 local AIFactionManager = require("battle/manager/AIFactionManager")
@@ -31,6 +32,9 @@ local SelectedGroupInfoManager = require("battle/manager/SelectedGroupInfoManage
 local UnitsFormationManager = require("battle/manager/UnitsFormationManager")
 local CheckPointConquerManager = require("battle/manager/CheckPointConquerManager")
 local CalculateSpawnTimeManager = require("battle/manager/CalculateSpawnTimeManager")
+local SpawnQueueUIDrawer = require("battle/manager/SpawnQueueUIDrawer")
+local SpawnQueueSpawner = require("battle/manager/SpawnQueueSpawner")
+
 
 --- @class Battle
 --- @field config BattleConfig
@@ -49,6 +53,12 @@ local CalculateSpawnTimeManager = require("battle/manager/CalculateSpawnTimeMana
 --- @field currently_selected_control_groups table<number, ControlGroup>
 --- @field player_spawn_time number
 --- @field enemy_spawn_time number
+--- @field player_time_since_last_spawn number
+--- @field enemy_time_since_last_spawn number
+--- @field player_check_points number
+--- @field enemy_check_points number
+--- @field player_spawn_queue table<number, SpawnQueueEntry>
+--- @field enemy_spawn_queue table<number, SpawnQueueEntry>
 Battle = {
   config = nil,
   debug = true,
@@ -67,7 +77,13 @@ Battle = {
   spawn_delay = 3,
   currently_selected_control_groups = {},
   player_spawn_time = 3,
+  player_time_since_last_spawn = 0,
+  player_check_points = 0,
   enemy_spawn_time = 3,
+  enemy_time_since_last_spawn = 0,
+  enemy_check_points = 0,
+  player_spawn_queue = {},
+  enemy_spawn_queue = {},
   factions = {
     player = BattleFaction.new("player", { 0, 0, 255 / 255 }, true, 500),
     enemy = BattleFaction.new("enemy", { 255 / 255, 0, 0 }, false, 500),
@@ -208,6 +224,7 @@ function Battle.update(dt)
 
   --AttackManager.update(Battle, dt)
   --SpawnManager.update(Battle, dt)
+  SpawnQueueSpawner.update(Battle, dt)
   ChunkSpawnerAndUnitController.update(Battle, dt)
   AIFactionManager.update(Battle, dt)
   CollisionManager.collide(Battle, dt)
@@ -224,6 +241,7 @@ function Battle.update(dt)
 
   CheckPointConquerManager.update(Battle, dt)
   CalculateSpawnTimeManager.update(Battle, dt)
+
 
   local unit_num = 0
   for _, c in ipairs(Battle.chunks) do
@@ -285,5 +303,6 @@ function Battle.draw()
   ChunkSpawnerAndUnitController.draw(Battle)
   DrawSelectedCommandGroupsOutline.draw(Battle)
   SelectedGroupInfoManager.draw(Battle)
+  SpawnQueueUIDrawer.draw(Battle)
 
 end

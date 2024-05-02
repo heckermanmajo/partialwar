@@ -63,15 +63,26 @@ local function spawn_units_into_chunk()
 
   if love.keyboard.isDown("1") then
 
-    spawn_unit_type(
-      UnitTypes.Spearman,
-      Battle.factions.player,
-      Battle.player_spawn_time
-    )
+    if last_spawn_cool_down == 0 then
+
+      -- todo only do this if enough resources are available
+      -- todo subtract the cost of the unit from the player resources
+
+      table.insert(
+        Battle.player_spawn_queue,
+        SpawnQueueEntry.new(
+          UnitTypes.Spearman,
+          currently_selected_chunk
+        )
+      )
+
+      last_spawn_cool_down = 0.3
+
+    end
 
   end
 
-  if love.keyboard.isDown("2") then
+  --[[]if love.keyboard.isDown("2") then
 
     spawn_unit_type(
       UnitTypes.Bowman,
@@ -110,6 +121,7 @@ local function spawn_units_into_chunk()
     )
 
   end
+  -]]
 
   -- we need a fast unit
   -- we need mages
@@ -132,13 +144,7 @@ local function draw_create_unit_info_ui()
   love.graphics.print("Spearman", 30, love.graphics.getHeight() - 190)
   love.graphics.print("Cost: 10", 30, love.graphics.getHeight() - 170)
   love.graphics.print("Health: 100", 30, love.graphics.getHeight() - 150)
-
-  -- the 2 key spot
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.print("2", 10, love.graphics.getHeight() - 130 + 20)
-  love.graphics.print("Archer", 30, love.graphics.getHeight() - 130 + 20)
-  love.graphics.print("Cost: 20", 30, love.graphics.getHeight() - 110 + 20)
-  love.graphics.print("Health: 50", 30, love.graphics.getHeight() - 90 + 20)
+  UnitTypes.Spearman:draw_icon(30, love.graphics.getHeight() - 130,0.5, true)
 
   love.graphics.setColor(1, 1, 1)
 

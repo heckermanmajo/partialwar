@@ -1,6 +1,7 @@
 # PartialWar V0.1 - The proof of concept
 
 ## Campaign-System
+
 - round based 
 - tile based 
 - army based (create army with one click, add one group of units with another click)

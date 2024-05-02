@@ -6,12 +6,14 @@ local UnitTypes = {}
 
 do
 
-  local speed = 50
+  local speed = 100
   local cost = 0.5
   local size = 64
   local shield_level = 0
   local armor_level = 0
-  local batch_size = 100
+  local batch_size = 25
+  local spawn_time = 10
+  local number_of_command_groups = 4
 
   UnitTypes["Spearman"] = BattleUnitType.new(
     "Spearman",
@@ -25,7 +27,9 @@ do
     Weapons.spear,
     shield_level,
     armor_level,
-    batch_size
+    batch_size,
+    spawn_time,
+    number_of_command_groups
   )
 
 end
@@ -37,7 +41,9 @@ do
   local size = 64
   local shield_level = 1
   local armor_level = 0
-  local batch_size = 70
+  local batch_size = 20
+  local spawn_time = 1
+  local number_of_command_groups = 2
 
   UnitTypes["Levy"] = BattleUnitType.new(
     "Levy",
@@ -51,7 +57,9 @@ do
     Weapons.short_sword,
     shield_level,
     armor_level,
-    batch_size
+    batch_size,
+    spawn_time,
+    number_of_command_groups
   )
 
 end
@@ -66,6 +74,8 @@ do
   local shield_level = 2
   local armor_level = 1
   local batch_size = 25
+  local spawn_time = 1
+  local number_of_command_groups = 1
 
   UnitTypes["Swordsman"] = BattleUnitType.new(
     "Swordsman",
@@ -79,7 +89,9 @@ do
     Weapons.sword,
     shield_level,
     armor_level,
-    batch_size
+    batch_size,
+    spawn_time,
+    number_of_command_groups
   )
 
 end
@@ -95,6 +107,8 @@ do
   local shield_level = 0
   local armor_level = 0
   local batch_size = 40
+  local spawn_time = 1
+  local number_of_command_groups = 2
 
   UnitTypes["Bowman"] = BattleUnitType.new(
     "Bowman",
@@ -108,7 +122,9 @@ do
     Weapons.bow,
     shield_level,
     armor_level,
-    batch_size
+    batch_size,
+    spawn_time,
+    number_of_command_groups
   )
 
 end
@@ -121,6 +137,8 @@ do
   local shield_level = 0
   local armor_level = 1
   local batch_size = 25
+  local spawn_time = 1
+  local number_of_command_groups = 1
 
   UnitTypes["CrossBowman"] = BattleUnitType.new(
     "CrossBowman",
@@ -134,7 +152,9 @@ do
     Weapons.crossbow,
     shield_level,
     armor_level,
-    batch_size
+    batch_size,
+    spawn_time,
+    number_of_command_groups
   )
 
 end

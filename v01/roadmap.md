@@ -1,14 +1,33 @@
 # Roadmap
 
 ## RTS battles in nice
+BUG: He ignores the last row of chunks -> do we create the chunks correctly?
+BUG: after engaged mode -> they do not walk back to the center point of the command group
+
+- set a walk target for a command group on the mini map
 - select all groups on screen with q
-- add map control mode
-- add a spawn-queue at the top of the screen
-- draw icon function for unit types -> for ui and queue
+
+- spawn ui at the bottom of the screen
+
+- balance spawn times
+- add command point boni for more checkpoints controlled
+
 - fallback to the left side for units
 - conquer checkpoints on the map
-- add back the command point-add mages 
-- add giants
+- add back the command point
+
+
+- add mages
+
+- make enemy use the command group system
+- add ai spawn queue manager 
+- add enemy battle movement ai 
+
+- add small flags at some of the units
+
+- better visual for the checkpoints
+- flags, barrels, tents, etc.
+  - maybe different ones 
 
 ## Smart campaign map ai 
 
@@ -23,6 +42,9 @@
   turret like defenses on the battle map
 
 ## Bigger units, explosive weapons
+- giants
+- horses
+
 
 ## CLEANUP OF THE CODE
 - add asserts

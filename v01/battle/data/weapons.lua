@@ -6,7 +6,7 @@ do
   local image = love.graphics.newImage("battle/res/spear.png")
   local damage = 4
   local range = 90
-  local cool_down = 3
+  local cool_down = 5
   local is_ranged = false
   local projectile_image = nil
 

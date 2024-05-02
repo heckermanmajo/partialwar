@@ -36,6 +36,9 @@ function CalculateSpawnTimeManager.update(Battle, dt)
   Battle.player_spawn_time = player_spawn_time
   Battle.enemy_spawn_time = enemy_spawn_time
 
+  Battle.player_check_points = my_checkpoints
+  Battle.enemy_check_points = enemy_checkpoints
+
 end
 
 return CalculateSpawnTimeManager

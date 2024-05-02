@@ -12,9 +12,12 @@ function CheckPointConquerManager.update(Battle, dt)
 
   -- todo: dont do this every frame ...
   for _, chunk in ipairs(Battle.chunks) do
+
     if chunk.is_checkpoint then
+
       local player_units = 0
       local enemy_units = 0
+
       for _, unit in ipairs(chunk.units) do
         if unit.faction == Battle.factions.player then
           player_units = player_units + 1
