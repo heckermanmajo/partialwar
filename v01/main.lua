@@ -5,6 +5,12 @@ require("camp/Camp")
 
 function love.load(arg)
 
+  --- PROFILE CODE START
+  love.profiler = require('profile')
+  love.profiler.start()
+  --- PROFILE CODE END
+
+
   if arg[1] then
     print("arg[1]: " .. arg[1])
     Camp.mode = arg[1]
@@ -28,6 +34,12 @@ function love.load(arg)
 
 end
 
+--- PROFILE CODE START
+-- generates a report every 100 frames
+love.frame = 0
+--- PROFILE CODE END
+
+
 function love.update(dt)
 
   if Camp.mode == "camp" then
@@ -40,6 +52,14 @@ function love.update(dt)
     love.event.quit()
   end
 
+  --- PROFILE CODE START
+  love.frame = love.frame + 1
+  if love.frame%100 == 0 then
+    love.report = love.profiler.report(20)
+    love.profiler.reset()
+  end
+  --- PROFILE CODE END
+
 end
 
 function love.draw()
@@ -49,5 +69,10 @@ function love.draw()
   else
     Battle.draw()
   end
+
+
+  --- PROFILE CODE START
+  love.graphics.print(love.report or "Please wait...", 0 , 300 )
+  --- PROFILE CODE END
 
 end

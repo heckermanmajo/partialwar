@@ -12,6 +12,15 @@ Chunk.new = function(x, y, size)
     y = y,
     size = size,
     units = {},
+    -- todo: use this number to be able to look for enemies
+    --       nearby
+    -- this allows for faster projectile collision detection
+    -- this allows for faster target acquisition
+    number_player_units = 0,
+    number_enemy_units = 0,
+    player_units = {},
+    enemy_units = {},
+
     is_checkpoint = false,
     current_owner = nil
   }

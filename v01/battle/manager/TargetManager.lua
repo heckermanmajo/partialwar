@@ -12,7 +12,18 @@ function TargetManager.update(Battle, dt)
     -- todo: if a unit self selects a targte, the unit can change the targte to
     --       a nearer one or a more valuable one...
 
-    if not u.target then
+    --- @type ControlGroup
+    local my_control_group = u.control_group
+    if my_control_group.mode ~= "engaged" then
+      goto continue
+    end
+
+
+    if not u.next_target_selection then
+      u.next_target_selection = 0
+    end
+
+    if not u.target and u.next_target_selection and u.next_target_selection < 0 then
       -- select nearest enemy that is not my faction
       u.attacking = false
       TargetManager.selectNearestEnemy(Battle, u)
@@ -28,6 +39,7 @@ function TargetManager.update(Battle, dt)
     -- select nearest enemy that is not my faction
     TargetManager.selectNearestEnemy(Battle, u)
     u.attacking = false
+    u.next_target_selection = love.math.random(2,7)
 
     ::continue::
   end
@@ -37,6 +49,8 @@ end
 function TargetManager.selectNearestEnemy(Battle, u)
   local nearest_enemy = nil
   local nearest_distance = 1000000
+
+  -- todo: search via near chunks
 
   for _, e in ipairs(Battle.units) do
     if e.faction ~= u.faction then

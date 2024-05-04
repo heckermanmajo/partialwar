@@ -4,9 +4,21 @@ local CollisionManager = {}
 
 
 --- @param Battle Battle
-function CollisionManager.collide(Battle)
+--- @param dt number
+function CollisionManager.collide(Battle, dt)
 
   for _, _c in ipairs(Battle.chunks) do
+
+    if _c.__next_collide_update == nil then
+      _c.__next_collide_update = love.math.random(0, 400) / 100
+    end
+
+    if _c.__next_collide_update > 0 then
+      _c.__next_collide_update = _c.__next_collide_update - dt
+      goto continue
+    end
+
+    _c.__next_collide_update = love.math.random(0, 400) / 100
 
     --- @type Chunk
     local c = _c
@@ -100,7 +112,7 @@ function CollisionManager.collide(Battle)
 
     end
 
-
+    :: continue ::
   end
 
 

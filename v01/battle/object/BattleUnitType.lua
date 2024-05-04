@@ -132,7 +132,7 @@ function BattleUnitType:draw_icon(x, y, scale, is_player)
       shield_one_image:getWidth() / 2, -- origin x
       shield_one_image:getHeight() / 2 -- origin y
     )
-  elseif unit.type.shield_level == 2 then
+  elseif self.shield_level == 2 then
     love.graphics.draw(
       shield_two_image, -- image
       x + self.size / 2, -- x

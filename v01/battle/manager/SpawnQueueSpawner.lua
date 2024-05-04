@@ -4,7 +4,8 @@ local SpawnQueueSpawner = {}
 local function spawn_unit_type(
   unit_type,
   faction,
-  currently_selected_chunk
+  currently_selected_chunk,
+  is_enemy
 )
 
 
@@ -17,9 +18,14 @@ local function spawn_unit_type(
     local rand_x = math.random(0, Battle.chunk_size)
     local rand_y = math.random(0, Battle.chunk_size)
 
+    local start_position = rand_x - unit_type.size
+    if is_enemy then
+      start_position = Battle.world_width - rand_x - unit_type.size
+    end
+
     local unit = BattleUnit.new(
-      rand_x - unit_type.size,
-      currently_selected_chunk.y + rand_y - unit_type.size,
+      start_position,
+      currently_selected_chunk.y + rand_y + unit_type.size,
       unit_type,
       faction
     )
@@ -62,7 +68,8 @@ function SpawnQueueSpawner.update(Battle, dt)
       local target_chunk = entry.target_chunk
       local unit_type = entry.unit_type
       for i = 1, unit_type.number_of_command_groups do
-        spawn_unit_type(unit_type, Battle.factions.player, target_chunk)
+        local is_enemy = false
+        spawn_unit_type(unit_type, Battle.factions.player, target_chunk, is_enemy)
       end
       table.remove(Battle.player_spawn_queue, 1)
     end
@@ -82,7 +89,8 @@ function SpawnQueueSpawner.update(Battle, dt)
       local target_chunk = entry.target_chunk
       local unit_type = entry.unit_type
       for i = 1, unit_type.number_of_command_groups do
-        spawn_unit_type(unit_type, Battle.factions.enemy, target_chunk)
+        local is_enemy = true
+        spawn_unit_type(unit_type, Battle.factions.enemy, target_chunk, is_enemy)
       end
       table.remove(Battle.enemy_spawn_queue, 1)
     end

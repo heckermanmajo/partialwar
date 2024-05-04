@@ -1,6 +1,16 @@
 # Roadmap
 
 ## RTS battles in nice
+
+Code Quality:
+
+- improve performance by using chunks instead of looping over all units 
+  for target acquisition
+- do not collect all dead units each frame
+  but then we need to make sure to call no logic on dead ones
+  adding "if dead" to other managers potentially
+- 
+
 BUG: He ignores the last row of chunks -> do we create the chunks correctly?
 BUG: after engaged mode -> they do not walk back to the center point of the command group
 
@@ -15,7 +25,6 @@ BUG: after engaged mode -> they do not walk back to the center point of the comm
 - fallback to the left side for units
 - conquer checkpoints on the map
 - add back the command point
-
 
 - add mages
 

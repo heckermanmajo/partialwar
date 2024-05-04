@@ -20,7 +20,7 @@ function MovingManager.move(Battle, dt)
     u.x = u.x + u.x_velocity / 60
     u.y = u.y + u.y_velocity / 60
 
-    u.last_push = love.math.random(0, 1)
+    u.last_push = love.math.random(1, 100) / 100
 
     ::continue::
 

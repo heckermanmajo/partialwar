@@ -1,4 +1,3 @@
-local SpawnManager = require("battle/manager/SpawnManager")
 
 local CommandPointDrawManager = {}
 
@@ -6,8 +5,6 @@ local CommandPointDrawManager = {}
 function CommandPointDrawManager.draw(Battle)
   local player = Battle.factions.player
   local enemy = Battle.factions.enemy
-
-  local time_til_next_command = SpawnManager.time_until_next_spawn
 
   -- make a gray rectangle as background
   love.graphics.setColor(255/255, 255/255, 255/255)

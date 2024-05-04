@@ -15,6 +15,8 @@ local ControlGroupMoveToTarget = {}
 local function has_enemies_in_reach(control_group, Battle)
 
   -- todo: update this for ranged units, so they attack from a distance
+  -- todo: make this work via chunks, not loop over all units
+  -- todo: only use 3 random units of the control group to check for enemies
 
   for _, unit in ipairs(control_group.units) do
 
@@ -145,7 +147,6 @@ function ControlGroupMoveToTarget.update(Battle, dt)
     if control_group.mode == "idle" then
       -- we are on the lookout for enemy units
 
-
       if has_enemies_in_reach(control_group, Battle) then
         control_group.last_mode = "idle"
         control_group.mode = "engaged"
@@ -160,10 +161,18 @@ function ControlGroupMoveToTarget.update(Battle, dt)
 
     if control_group.mode == "on_the_way" then
 
-      if has_enemies_in_reach(control_group, Battle) then
-        control_group.last_mode = "on_the_way"
-        control_group.mode = "engaged"
+      if control_group.__last_checked == nil then
+        control_group.__last_checked = 0
       end
+
+      if control_group.__last_checked < 0 then
+        if has_enemies_in_reach(control_group, Battle) then
+          control_group.last_mode = "on_the_way"
+          control_group.mode = "engaged"
+        end
+        control_group.__last_checked = love.math.random(2, 7)
+      end
+      control_group.__last_checked = control_group.__last_checked - dt
 
       assert(type(control_group.slowest_unit_speed) == "number", "control_group.slowest_unit_speed is not a number")
 

@@ -4,10 +4,13 @@ local UnitTypes = {}
 
 -- NOTE: if you change the armor_level, you need also to set the image to the armored version
 
+-- TODO; NOTE: you need to write unit strength and weaknesses
+--       into the unit types, so an AI can make decisions
+
 do
 
   local speed = 100
-  local cost = 0.5
+  local cost = 10
   local size = 64
   local shield_level = 0
   local armor_level = 0
@@ -42,7 +45,7 @@ do
   local shield_level = 1
   local armor_level = 0
   local batch_size = 20
-  local spawn_time = 1
+  local spawn_time = 20
   local number_of_command_groups = 2
 
   UnitTypes["Levy"] = BattleUnitType.new(
@@ -65,7 +68,6 @@ do
 end
 
 
-
 do
 
   local speed = 50
@@ -74,7 +76,7 @@ do
   local shield_level = 2
   local armor_level = 1
   local batch_size = 25
-  local spawn_time = 1
+  local spawn_time = 30
   local number_of_command_groups = 1
 
   UnitTypes["Swordsman"] = BattleUnitType.new(
@@ -98,7 +100,6 @@ end
 
 
 
-
 do
 
   local speed = 50
@@ -107,7 +108,7 @@ do
   local shield_level = 0
   local armor_level = 0
   local batch_size = 40
-  local spawn_time = 1
+  local spawn_time = 25
   local number_of_command_groups = 2
 
   UnitTypes["Bowman"] = BattleUnitType.new(
@@ -137,7 +138,7 @@ do
   local shield_level = 0
   local armor_level = 1
   local batch_size = 25
-  local spawn_time = 1
+  local spawn_time = 35
   local number_of_command_groups = 1
 
   UnitTypes["CrossBowman"] = BattleUnitType.new(

@@ -12,10 +12,9 @@ require("battle/object/SpawnQueueEntry")
 local AttackManager = require("battle/manager/AttackManager")
 local ChunkManager = require("battle/manager/ChunkManager")
 local DebugViewManager = require("battle/manager/DebugViewManager")
---local SpawnManager = require("battle/manager/SpawnManager")
 local UnitDrawManager = require("battle/manager/UnitDrawManager")
 local CommandPointDrawManager = require("battle/manager/CommandPointDrawManager")
-local AIFactionManager = require("battle/manager/AIFactionManager")
+--local AIFactionManager = require("battle/manager/AIFactionManager")
 local CollisionManager = require("battle/manager/CollisionManager")
 local MovingManager = require("battle/manager/MovingManager")
 local TargetManager = require("battle/manager/TargetManager")
@@ -34,6 +33,7 @@ local CheckPointConquerManager = require("battle/manager/CheckPointConquerManage
 local CalculateSpawnTimeManager = require("battle/manager/CalculateSpawnTimeManager")
 local SpawnQueueUIDrawer = require("battle/manager/SpawnQueueUIDrawer")
 local SpawnQueueSpawner = require("battle/manager/SpawnQueueSpawner")
+local AiUnitSpawnManager = require("battle/manager/AiUnitSpawnManager")
 
 
 --- @class Battle
@@ -226,7 +226,7 @@ function Battle.update(dt)
   --SpawnManager.update(Battle, dt)
   SpawnQueueSpawner.update(Battle, dt)
   ChunkSpawnerAndUnitController.update(Battle, dt)
-  AIFactionManager.update(Battle, dt)
+  --AIFactionManager.update(Battle, dt)
   CollisionManager.collide(Battle, dt)
   MovingManager.move(Battle, dt)
   ChunkManager.update_all_unit_positions(Battle, dt)
@@ -241,7 +241,7 @@ function Battle.update(dt)
 
   CheckPointConquerManager.update(Battle, dt)
   CalculateSpawnTimeManager.update(Battle, dt)
-
+  AiUnitSpawnManager.update(Battle, dt)
 
   local unit_num = 0
   for _, c in ipairs(Battle.chunks) do
@@ -284,7 +284,7 @@ function Battle.draw()
   love.graphics.setBackgroundColor(70 / 255, 116 / 255, 93 / 255)
 
 
-  ChunkManager.draw(Battle)
+  --ChunkManager.draw(Battle)
 
   EffectDrawer.draw(Battle)
 

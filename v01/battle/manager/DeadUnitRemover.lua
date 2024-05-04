@@ -5,6 +5,10 @@ local dead_unit_image = love.graphics.newImage("battle/res/dead.png")
 --- @param Battle Battle
 function DeadBodyRemover.update(Battle, dt)
 
+  -- todo: this does not need to happen each frame ...
+  --   but then we need to make sure to call no logic on dead ones
+  --   adding "if dead" to other managers potentially
+
   -- remove all dead units from the chunks
   for j = #Battle.chunks, 1, -1 do
     local c = Battle.chunks[j]
@@ -62,10 +66,6 @@ function DeadBodyRemover.update(Battle, dt)
     end
 
   end
-
-
-
-
 
 
 end
