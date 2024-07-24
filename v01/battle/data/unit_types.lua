@@ -40,7 +40,7 @@ end
 do
 
   local speed = 50
-  local cost = 1
+  local cost = 50
   local size = 64
   local shield_level = 1
   local armor_level = 0
@@ -71,7 +71,7 @@ end
 do
 
   local speed = 50
-  local cost = 5
+  local cost = 100
   local size = 64
   local shield_level = 2
   local armor_level = 1
@@ -103,7 +103,7 @@ end
 do
 
   local speed = 50
-  local cost = 2
+  local cost = 100
   local size = 64
   local shield_level = 0
   local armor_level = 0
@@ -133,7 +133,7 @@ end
 do
 
   local speed = 50
-  local cost = 10
+  local cost = 100
   local size = 64
   local shield_level = 0
   local armor_level = 1

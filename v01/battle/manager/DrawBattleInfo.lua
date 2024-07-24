@@ -17,7 +17,6 @@ function DrawBattleInfo.draw_battle_info(battle)
       enemy_units = enemy_units + 1
     end
 
-
   end
 
   love.graphics.setColor(1, 1, 1)

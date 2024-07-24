@@ -6,6 +6,9 @@ local UnitsFormationManager = {}
 --- @param dt number
 function UnitsFormationManager.update(Battle, dt)
 
+  -- todo: if there are a lot of my fellow units in the target chunk,
+  -- todo: i am fine with staying in the neighbour chunk ...
+
   -- check if my distance is too big to the command group
   for _, _u in ipairs(Battle.units) do
 

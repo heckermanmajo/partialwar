@@ -50,18 +50,21 @@ end
 --- @param dt number
 function ControlGroupMoveToTarget.update(Battle, dt)
 
-  -- this does not need to be done every frame for all control groups
-  -- so we can randomize the next update time
+  -- for each control group
+  -- check in what state the group is
+  -- then act on the units in the group
 
   for _, control_group in ipairs(Battle.control_groups) do
 
+    -- fighting does not need to be done every frame for all control groups
+    -- so we can randomize the next update time
     if control_group.__next_move_to_target_update == nil then
       control_group.__next_move_to_target_update = love.math.random(0, 400) / 100
     end
 
     if control_group.__next_move_to_target_update > 0 then
       control_group.__next_move_to_target_update = control_group.__next_move_to_target_update - dt
-      goto continue
+      goto before_on_the_way -- jump to the movement part of the loop
     end
 
     -- calculate the slowest unit speed
@@ -73,6 +76,7 @@ function ControlGroupMoveToTarget.update(Battle, dt)
     end
 
 
+    -----------------------------------------------------------------------------------------------
     -- ENGAGED MODE : The control group is in a fight
     if control_group.mode == "engaged" then
       -- check if units are still engaged ...
@@ -111,6 +115,7 @@ function ControlGroupMoveToTarget.update(Battle, dt)
 
     end
 
+    -----------------------------------------------------------------------------------------------
     -- SEARCHING MODE : The control group is looking for the next checkpoint on the map to conquer
     if control_group.mode == "searching" then
       -- check if we are near to a check point that does not
@@ -144,26 +149,25 @@ function ControlGroupMoveToTarget.update(Battle, dt)
 
     end
 
+
+    -----------------------------------------------------------------------------------------------
+    -- IDLE MODE : The control group is not in a fight and not moving to a target
     if control_group.mode == "idle" then
       -- we are on the lookout for enemy units
-
       if has_enemies_in_reach(control_group, Battle) then
         control_group.last_mode = "idle"
         control_group.mode = "engaged"
       end
-
-
     end
 
     control_group.__next_move_to_target_update = love.math.random(0, 400) / 100
 
-    :: continue ::
+    :: before_on_the_way ::
 
+    -----------------------------------------------------------------------------------------------
     if control_group.mode == "on_the_way" then
 
-      if control_group.__last_checked == nil then
-        control_group.__last_checked = 0
-      end
+      if control_group.__last_checked == nil then control_group.__last_checked = 0 end
 
       if control_group.__last_checked < 0 then
         if has_enemies_in_reach(control_group, Battle) then
@@ -197,17 +201,11 @@ function ControlGroupMoveToTarget.update(Battle, dt)
         local x_direction
         local y_direction
 
-        if control_group.center_x < control_group.target_chunk.x then
-          x_direction = 1
-        else
-          x_direction = -1
-        end
+        if control_group.center_x < control_group.target_chunk.x then x_direction = 1
+        else x_direction = -1 end
 
-        if control_group.center_y < control_group.target_chunk.y then
-          y_direction = 1
-        else
-          y_direction = -1
-        end
+        if control_group.center_y < control_group.target_chunk.y then y_direction = 1
+        else y_direction = -1 end
 
         local delta_x = x_direction * control_group.slowest_unit_speed * dt
         local delta_y = y_direction * control_group.slowest_unit_speed * dt
@@ -246,9 +244,10 @@ function ControlGroupMoveToTarget.update(Battle, dt)
         -- we have reached the target !
         control_group.mode = control_group.last_mode
       end
-    end
 
-  end
+    end -- on_the_way
+
+  end -- for each control group
 
 
 end

@@ -28,9 +28,7 @@ function ChunkManager.init_chunks(Battle)
 
       local rand_of_100 = love.math.random(0, 100)
 
-      if rand_of_100 < 2 then
-        chunk.is_checkpoint = true
-      end
+      --if rand_of_100 < 2 then chunk.is_checkpoint = true end
 
       table.insert(Battle.chunks, chunk)
 
@@ -44,6 +42,26 @@ function ChunkManager.init_chunks(Battle)
 
   end
 
+  -- 3 checkpoints on player side
+  local max_x = 300
+  for i = 1, 3 do
+    local x = love.math.random(0, max_x)
+    local y = love.math.random(0, Battle.world_height)
+    local chunk = ChunkManager.get_chunk_by_position(x, y, Battle)
+    chunk.is_checkpoint = true
+    chunk.current_owner = Battle.factions.player
+  end
+
+  -- 3 checkpoints on enemy side
+  local min_x = Battle.world_width - 300
+  for i = 1, 3 do
+    local x = love.math.random(min_x, Battle.world_width)
+    local y = love.math.random(0, Battle.world_height)
+    local chunk = ChunkManager.get_chunk_by_position(x, y, Battle)
+    chunk.is_checkpoint = true
+    chunk.current_owner = Battle.factions.enemy
+  end
+
 end
 
 --- Draws the chunks.
@@ -51,20 +69,12 @@ end
 --- @return void
 function ChunkManager.draw(Battle)
 
-  if not Battle.debug then
-    return
-  end
+  if not Battle.debug then return end
 
   for _, _c in ipairs(Battle.chunks) do
 
     local padding = Battle.chunk_size + 100
 
-    --[[local chunk_is_in_view = (
-      _c.x + Battle.camera_x_position > 0 and
-      _c.x + Battle.camera_x_position < love.graphics.getWidth() and
-      _c.y + Battle.camera_y_position > 0 and
-      _c.y + Battle.camera_y_position < love.graphics.getHeight()
-    )]]
     -- add padding to the chunks
     local chunk_is_in_view = (
       _c.x + Battle.camera_x_position > -padding and
@@ -79,13 +89,10 @@ function ChunkManager.draw(Battle)
 
       if c.is_checkpoint then
         -- draw a yellow background for the checkpoint
-        if c.current_owner == Battle.factions.player then
-          love.graphics.setColor(0, 1, 0, 0.2)
-        elseif c.current_owner == Battle.factions.enemy then
-          love.graphics.setColor(1, 0, 0, 0.2)
-        else
-          love.graphics.setColor(1, 1, 0, 0.2)
-        end
+        if c.current_owner == Battle.factions.player then love.graphics.setColor(0, 1, 0, 0.2)
+        elseif c.current_owner == Battle.factions.enemy then love.graphics.setColor(1, 0, 0, 0.2)
+        else love.graphics.setColor(1, 1, 0, 0.2) end
+
         love.graphics.rectangle("fill", c.x + Battle.camera_x_position, c.y + Battle.camera_y_position, c.size, c.size)
         love.graphics.setColor(1, 1, 1)
       end

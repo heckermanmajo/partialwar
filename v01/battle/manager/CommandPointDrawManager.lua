@@ -1,4 +1,3 @@
-
 local CommandPointDrawManager = {}
 
 --- @param Battle Battle
@@ -7,15 +6,15 @@ function CommandPointDrawManager.draw(Battle)
   local enemy = Battle.factions.enemy
 
   -- make a gray rectangle as background
-  love.graphics.setColor(255/255, 255/255, 255/255)
+  love.graphics.setColor(255 / 255, 255 / 255, 255 / 255)
   love.graphics.rectangle("fill", 0, 100, 200, 130)
 
   love.graphics.setColor(player.color)
-  love.graphics.print("Player: " .. player.command_points .. "( SPAWNTIME: ".. Battle.player_spawn_time ..")", 10, 110)
+  love.graphics.print("Player: " .. player.command_points, 10, 110)
 
   -- make a gray rectangle as background
   love.graphics.setColor(enemy.color)
-  love.graphics.print("Enemy: " .. enemy.command_points .. "( SPAWNTIME: ".. Battle.enemy_spawn_time ..")", 10, 130)
+  love.graphics.print("Enemy: " .. enemy.command_points, 10, 130)
 
   -- draw the checkpoints
   local my_checkpoints = Battle.player_check_points
@@ -34,7 +33,7 @@ function CommandPointDrawManager.draw(Battle)
   love.graphics.print("Next spawn in :  " .. Battle.enemy_time_since_last_spawn, 10, 210)
 
   -- set back to white
-  love.graphics.setColor(255/255, 255/255, 255/255)
+  love.graphics.setColor(255 / 255, 255 / 255, 255 / 255)
 end
 
 return CommandPointDrawManager

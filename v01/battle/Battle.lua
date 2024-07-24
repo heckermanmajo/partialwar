@@ -14,7 +14,6 @@ local ChunkManager = require("battle/manager/ChunkManager")
 local DebugViewManager = require("battle/manager/DebugViewManager")
 local UnitDrawManager = require("battle/manager/UnitDrawManager")
 local CommandPointDrawManager = require("battle/manager/CommandPointDrawManager")
---local AIFactionManager = require("battle/manager/AIFactionManager")
 local CollisionManager = require("battle/manager/CollisionManager")
 local MovingManager = require("battle/manager/MovingManager")
 local TargetManager = require("battle/manager/TargetManager")
@@ -24,17 +23,20 @@ local EffectDrawer = require("battle/manager/EffectDrawer")
 local ProjectileManager = require("battle/manager/ProjectileManager")
 local DrawBattleInfo = require("battle/manager/DrawBattleInfo")
 local MinimapDrawer = require("battle/manager/MinimapDrawer")
-local ChunkSpawnerAndUnitController = require("battle/manager/ChunkSpawnerAndUnitController")
+
 local DrawSelectedCommandGroupsOutline = require("battle/manager/DrawSelectedCommandGroupsOutline")
 local ControlGroupMoveToTarget = require("battle/manager/ControlGroupMoveToTarget")
 local SelectedGroupInfoManager = require("battle/manager/SelectedGroupInfoManager")
 local UnitsFormationManager = require("battle/manager/UnitsFormationManager")
 local CheckPointConquerManager = require("battle/manager/CheckPointConquerManager")
-local CalculateSpawnTimeManager = require("battle/manager/CalculateSpawnTimeManager")
 local SpawnQueueUIDrawer = require("battle/manager/SpawnQueueUIDrawer")
 local SpawnQueueSpawner = require("battle/manager/SpawnQueueSpawner")
 local AiUnitSpawnManager = require("battle/manager/AiUnitSpawnManager")
 
+-- UI
+local SpawnUnitsViaNumberKeys = require("battle/manager/ui/SpawnUnitsViaNumberKeys")
+local UnitGroupController = require("battle/manager/ui/UnitGroupController")
+local DrawSelectUnitToSpawnImages = require("battle/manager/ui/DrawSelectUnitToSpawnImages")
 
 --- @class Battle
 --- @field config BattleConfig
@@ -59,6 +61,7 @@ local AiUnitSpawnManager = require("battle/manager/AiUnitSpawnManager")
 --- @field enemy_check_points number
 --- @field player_spawn_queue table<number, SpawnQueueEntry>
 --- @field enemy_spawn_queue table<number, SpawnQueueEntry>
+--- @field currently_selected_chunk Chunk|nil
 Battle = {
   config = nil,
   debug = true,
@@ -68,7 +71,7 @@ Battle = {
   effects = {},
   projectiles = {},
   control_groups = {},
-  player_commander = Commander.new(100,600, 300),
+  player_commander = Commander.new(100, 600, 300),
   world_width = 256 * 30,
   world_height = 256 * 30,
   chunk_size = 256,
@@ -84,6 +87,7 @@ Battle = {
   enemy_check_points = 0,
   player_spawn_queue = {},
   enemy_spawn_queue = {},
+  currently_selected_chunk = nil,
   factions = {
     player = BattleFaction.new("player", { 0, 0, 255 / 255 }, true, 500),
     enemy = BattleFaction.new("enemy", { 255 / 255, 0, 0 }, false, 500),
@@ -222,11 +226,8 @@ function Battle.update(dt)
     Battle.camera_x_position = Battle.camera_x_position - 600 * dt
   end
 
-  --AttackManager.update(Battle, dt)
-  --SpawnManager.update(Battle, dt)
   SpawnQueueSpawner.update(Battle, dt)
-  ChunkSpawnerAndUnitController.update(Battle, dt)
-  --AIFactionManager.update(Battle, dt)
+
   CollisionManager.collide(Battle, dt)
   MovingManager.move(Battle, dt)
   ChunkManager.update_all_unit_positions(Battle, dt)
@@ -239,8 +240,11 @@ function Battle.update(dt)
   ControlGroupMoveToTarget.update(Battle, dt)
   UnitsFormationManager.update(Battle, dt)
 
+  -- ui
+  SpawnUnitsViaNumberKeys.update(Battle, dt)
+  UnitGroupController.update(Battle, dt)
+
   CheckPointConquerManager.update(Battle, dt)
-  CalculateSpawnTimeManager.update(Battle, dt)
   AiUnitSpawnManager.update(Battle, dt)
 
   local unit_num = 0
@@ -268,8 +272,10 @@ function Battle.update(dt)
 
   if (
     (no_player_units and Battle.factions.player.command_points <= 0)
+      and #Battle.player_spawn_queue == 0
       or
       (no_enemy_units and Battle.factions.enemy.command_points <= 0)
+        and #Battle.enemy_spawn_queue == 0
   )
   then
     Battle.conclude()
@@ -283,8 +289,8 @@ function Battle.draw()
   -- set background color to an gray
   love.graphics.setBackgroundColor(70 / 255, 116 / 255, 93 / 255)
 
-
-  --ChunkManager.draw(Battle)
+  -- enable on debug mode ...
+  -- ChunkManager.draw(Battle)
 
   EffectDrawer.draw(Battle)
 
@@ -293,14 +299,13 @@ function Battle.draw()
 
   ProjectileManager.draw(Battle)
 
-  --CommanderManager.draw(Battle)
-
   CommandPointDrawManager.draw(Battle)
 
   DrawBattleInfo.draw_battle_info(Battle)
 
   MinimapDrawer.draw(Battle)
-  ChunkSpawnerAndUnitController.draw(Battle)
+  DrawSelectUnitToSpawnImages.draw(Battle)
+  UnitGroupController.draw(Battle)
   DrawSelectedCommandGroupsOutline.draw(Battle)
   SelectedGroupInfoManager.draw(Battle)
   SpawnQueueUIDrawer.draw(Battle)
