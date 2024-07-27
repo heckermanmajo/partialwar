@@ -22,24 +22,16 @@ function DeadBodyRemover.update(Battle, dt)
 
   -- remove all dead units from the targets
   for i = #Battle.units, 1, -1 do
-
     local u = Battle.units[i]
-
-    if u.target and u.target.hp <= 0 then
-      u.target = nil
-    end
-
+    if u.target and u.target.hp <= 0 then u.target = nil end
   end
 
 
   -- remove all dead units from the units-table in the battle
   -- and also remove the unit from its command group
   for i = #Battle.units, 1, -1 do
-
     local u = Battle.units[i]
-
     if u.hp <= 0 then
-
       -- remove the unit from its command group
       if u.control_group then
         for j = #u.control_group.units, 1, -1 do
@@ -49,7 +41,6 @@ function DeadBodyRemover.update(Battle, dt)
         end
         u.control_group = nil
       end
-
 
       table.remove(Battle.units, i)
 
@@ -62,12 +53,8 @@ function DeadBodyRemover.update(Battle, dt)
         200
       ))
 
-
     end
-
   end
-
-
 end
 
 

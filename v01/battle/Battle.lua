@@ -88,12 +88,29 @@ Battle = {
   player_spawn_queue = {},
   enemy_spawn_queue = {},
   currently_selected_chunk = nil,
+  minimap_start_pixel_x = 0,
+  minimap_start_pixel_y = 0,
+  minimap_end_pixel_x = 0,
+  minimap_end_pixel_y = 0,
   factions = {
     player = BattleFaction.new("player", { 0, 0, 255 / 255 }, true, 500),
     enemy = BattleFaction.new("enemy", { 255 / 255, 0, 0 }, false, 500),
   }
 }
 Battle.__index = Battle
+
+function Battle.mouse_on_minimap()
+  local x, y = love.mouse.getPosition()
+  return x > Battle.minimap_start_pixel_x and x < Battle.minimap_end_pixel_x and y > Battle.minimap_start_pixel_y and y < Battle.minimap_end_pixel_y
+end
+
+function Battle.transform_mouseclick_on_minimap_to_real_world_xy()
+  local x, y = love.mouse.getPosition()
+  local scale = Battle.chunk_size / Battle.world_width
+  local real_x = (x - Battle.minimap_start_pixel_x) / scale
+  local real_y = (y - Battle.minimap_start_pixel_y) / scale
+  return real_x, real_y
+end
 
 function Battle.get_x_position_in_world(x)
   if x < 0 then
@@ -309,5 +326,9 @@ function Battle.draw()
   DrawSelectedCommandGroupsOutline.draw(Battle)
   SelectedGroupInfoManager.draw(Battle)
   SpawnQueueUIDrawer.draw(Battle)
+
+  -- draw the outline of the whole map
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.rectangle("line", 0 + Battle.camera_x_position, Battle.camera_y_position, Battle.world_width, Battle.world_height)
 
 end

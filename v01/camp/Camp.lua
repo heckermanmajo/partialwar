@@ -1,3 +1,5 @@
+local Menu = require("menu")
+
 local GenerateCampMap = require("camp/manager/GenerateCampMap")
 local TileRenderer = require("camp/manager/TileRenderer")
 local ArmySpawner = require("camp/manager/ArmySpawner")
@@ -87,6 +89,10 @@ end
 
 function Camp.update(dt)
 
+  if not Menu.menu_sound:isPlaying() then
+    love.audio.play(Menu.menu_sound)
+  end
+
   CampEndManager.end_camp(Camp)
 
   Camp.click_consumed_by_ui = false
@@ -96,13 +102,13 @@ function Camp.update(dt)
     Camp.view_y = Camp.view_y + 700 * dt
   end
   if love.keyboard.isDown("s") then
-    Camp.view_y = Camp.view_y -  700 * dt
+    Camp.view_y = Camp.view_y - 700 * dt
   end
   if love.keyboard.isDown("a") then
-    Camp.view_x = Camp.view_x +  700 * dt
+    Camp.view_x = Camp.view_x + 700 * dt
   end
   if love.keyboard.isDown("d") then
-    Camp.view_x = Camp.view_x -  700 * dt
+    Camp.view_x = Camp.view_x - 700 * dt
   end
 
   NextRoundManager.update(Camp, dt)
@@ -180,10 +186,7 @@ function Camp.draw()
 
   end
 
-
-
-  love.graphics.setColor(0.4, 0.4, 0.4)
-  love.graphics.rectangle("fill", 0, 0, 200, 300)
+  Menu.draw_background_brown(0, 0, 380, 480)
 
   MoneyRenderer.render_money(Camp)
   NextRoundManager.draw(Camp)

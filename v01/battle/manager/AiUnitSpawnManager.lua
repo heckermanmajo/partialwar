@@ -16,12 +16,9 @@ local time_to_next_spawn = 0
 --- @param dt number
 function AiUnitSpawnManager.update(Battle, dt)
 
-  if time_to_next_spawn > 0 then
-    time_to_next_spawn = time_to_next_spawn - dt
-    return
-  end
+  if time_to_next_spawn > 0 then time_to_next_spawn = time_to_next_spawn - dt; return end
 
-  --TODO this value can be part of a difficulty setting
+  -- TODO this value can be part of a difficulty setting
   time_to_next_spawn = 5
 
   -- just spawn until command points are empty

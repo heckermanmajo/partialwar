@@ -8,9 +8,7 @@ function MovingManager.move(Battle, dt)
     --- @type BattleUnit
     local u = _u
 
-    if type(u.last_push) == "nil" then
-      u.last_push = 0
-    end
+    if type(u.last_push) == "nil" then u.last_push = 0 end
 
     if u.last_push > 0 then
       u.last_push = u.last_push - dt

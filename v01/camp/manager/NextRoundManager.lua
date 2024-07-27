@@ -1,3 +1,4 @@
+local Menu = require("menu")
 local CampAIManager = require("v01/camp/manager/CampAIManager")
 
 --[[
@@ -15,6 +16,8 @@ NextRoundManager.current_actions = {}
 NextRoundManager.time_to_next_action = 0
 NextRoundManager.done_with_current_faction = false
 
+local button_pos = { x = 8, y = 70, w = 220, h = 40 }
+
 --- @param camp Camp
 function NextRoundManager.draw(camp)
   -- background for the faction turn
@@ -28,9 +31,11 @@ function NextRoundManager.draw(camp)
     love.graphics.setColor(0.2, 1, 0.2)
   end
 
-  love.graphics.rectangle("fill", 0, 50, 200, 50)
-  love.graphics.setColor(0, 0, 0)
-  love.graphics.print("Next Round", 10, 50)
+  Menu.draw_button(button_pos.x, button_pos.y, button_pos.w, button_pos.h, "Next Round")
+
+  ---love.graphics.rectangle("fill", 0, 50, 200, 50)
+  ---love.graphics.setColor(0, 0, 0)
+  ---love.graphics.print("Next Round", 10, 50)
 
 end
 
@@ -39,9 +44,12 @@ function NextRoundManager.handle_click(camp)
   local x, y = love.mouse.getPosition()
 
   local enter_is_pressed = love.keyboard.isDown("return")
-  local button_is_pressed = x > 10 and x < 210 and y > 50 and y < 100 and love.mouse.isDown(1)
+  local button_is_pressed =
+  x > button_pos.x and x < button_pos.x + button_pos.w and y > button_pos.y and y < button_pos.y + button_pos.h and love.mouse.isDown(1)
 
   if enter_is_pressed or button_is_pressed then
+
+    Menu.bell_sound:play()
 
     NextRoundManager.done_with_current_faction = false
     NextRoundManager.current_actions = {}

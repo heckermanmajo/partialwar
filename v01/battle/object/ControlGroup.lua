@@ -3,7 +3,9 @@
 ---        group is destroyed and units move randomly around.
 --- @field units BattleUnit[] The units that belong to the control group.
 --- @field organisation number The organisation of the control group. If it reaches 0, the control group is destroyed.
---- @field target_chunk Chunk The chunk that the control group is currently targeting
+--- @field walk_target_x number The x coordinate that the control group is currently walking to
+--- @field walk_target_y number The y coordinate that the control group is currently walking to
+---  @field target_chunk Chunk The chunk that the control group is currently targeting, DEPRECATED
 --- @field mode string "idle", "searching", "engaged", "on_the_way"
 --- @field last_mode string The last mode of the control group
 --- @field faction BattleFaction The faction that the control group belongs to
@@ -21,7 +23,9 @@ function ControlGroup.new(faction)
   self.faction = faction
   self.units = {}
   self.organisation = 100
-  self.target_chunk = nil
+  self.walk_target_x = -1
+  self.walk_target_y = -1
+  self.target_chunk = nil  --- @deprecated
   self.mode = "idle" -- "searching", "engaged", "idle", "on_the_way"
   self.last_mode = "idle"
   self.center_x = 0
@@ -31,5 +35,19 @@ function ControlGroup.new(faction)
   table.insert(Battle.control_groups, self)
 
   return self
+
+end
+
+function ControlGroup:calculate_center()
+
+  local average_x = 0
+  local average_y = 0
+  for _, u in ipairs(self.units) do
+    average_x = average_x + u.x
+    average_y = average_y + u.y
+  end
+
+  self.center_x = average_x / #self.units
+  self.center_y = average_y / #self.units
 
 end

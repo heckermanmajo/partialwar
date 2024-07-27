@@ -35,13 +35,12 @@ function MoneyRenderer.render_money(camp)
 
   end
 
-  love.graphics.setColor(1, 1, 1)
-  -- make a gray rectangle for the money
-  love.graphics.rectangle("fill", 0, 0, 200, 40)
-  love.graphics.setColor(0, 0, 0)
+  --set color white-gray
+  love.graphics.setColor(0.9, 0.9, 0.9, 1)
   love.graphics.print("Money: " .. camp.factions.player.money .."  / + "..player_income, 10, 10)
-  love.graphics.setColor(0, 0, 0)
   love.graphics.print("Money-enemy: " .. camp.factions.enemy.money .."  / + "..enemy_income, 10, 25)
+  -- set fot color to white
+  love.graphics.setColor(1, 1, 1, 1)
 
 end
 

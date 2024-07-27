@@ -1,0 +1,18 @@
+- direct to mouse movement: do not align groups with chunks
+- formation movement;: center and rotation to center fpor formation position
+- search for enemy in a much greater radius
+- some bug if units fight the some just chill and do nothing
+- if some units are selected treat minimap clicks as if they were on the main map
+  but to the minimap position
+- victory points: if a unit is on a victory point it should be able to capture it
+  and should be captured until another unit of the other team is on it
+- ai: try to capture the V 3 points
+- at the start of the battle all voictory points should be owned by each side
+- if you capture a victory point you should get a bonus of "units"
+
+- search for enemy: directly starts if i have no enemy, but was hit
+  -> no timing needed
+
+
+
+

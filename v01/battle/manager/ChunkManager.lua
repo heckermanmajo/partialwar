@@ -133,14 +133,11 @@ function ChunkManager.update_all_unit_positions(Battle, dt)
 
     --- @type BattleUnit
     local u = _u
-
     local my_old_chunk = u.current_chunk
     local new_chunk = ChunkManager.get_chunk_by_position(u.x, u.y, Battle)
 
     if my_old_chunk ~= new_chunk then
-      if my_old_chunk then
-        ChunkManager.remove_unit_from_chunk(u, my_old_chunk)
-      end
+      if my_old_chunk then ChunkManager.remove_unit_from_chunk(u, my_old_chunk) end
       table.insert(new_chunk.units, u)
       u.current_chunk = new_chunk
     end

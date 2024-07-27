@@ -49,7 +49,9 @@ local function spawn_from_queue(spawn_queue, time_until_next_spawn, faction, is_
 
         control_group.center_x = average_x / #control_group.units
         control_group.center_y = average_y / #control_group.units
-        control_group.target_chunk = target_chunk
+        --control_group.target_chunk = target_chunk
+        control_group.walk_target_x = target_chunk.x
+        control_group.walk_target_y = target_chunk.y
         control_group.mode = "on_the_way"
         control_group.faction = faction
 

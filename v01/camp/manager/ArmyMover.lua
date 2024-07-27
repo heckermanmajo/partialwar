@@ -1,3 +1,5 @@
+local Menu = require("menu")
+
 local ArmyMover = {}
 
 
@@ -217,6 +219,20 @@ function ArmyMover.move_army(camp, current_tile, target_tile)
   -- move the army to the target tile
   assert(current_tile.army, "There is no army on the current tile")
   assert(not target_tile.army, "There is already an army on the target tile")
+
+  if
+(  target_tile.owner == camp.factions.enemy
+  or target_tile.owner == nil )
+    and current_tile.owner == camp.factions.player
+  then
+    if target_tile.type == "factory" then
+      Menu.get_burg_sound:play()
+    end
+    if target_tile.type == "minerals" then
+      Menu.get_ore_sound:play()
+    end
+  end
+
   local army = current_tile.army
   current_tile.army = nil
   target_tile.army = army
@@ -244,6 +260,9 @@ function ArmyMover.move_army_with_all_consequences(camp, current_tile, target_ti
     end
 
   else
+
+    Menu.march_sound:play()
+
     -- if there is no army on the target tile, move the army
     ArmyMover.move_army(camp, current_tile, target_tile)
   end

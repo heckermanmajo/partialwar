@@ -107,6 +107,17 @@ function MinimapDrawer.draw(battle)
     end
   end
 
+  -- set the position of the minimap on the screen
+  ---  minimap_start_pixel_x = 0,
+  --  minimap_start_pixel_y = 0,
+  --  minimap_end_pixel_x = 0,
+  --  minimap_end_pixel_y = 0,
+  battle.minimap_start_pixel_x = minimap_start_x
+  battle.minimap_start_pixel_y = minimap_start_y
+  battle.minimap_end_pixel_x = minimap_end_x
+  battle.minimap_end_pixel_y = minimap_end_y
+
+
 end
 
 return MinimapDrawer

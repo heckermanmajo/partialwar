@@ -1,15 +1,22 @@
+local Menu = require("menu")
 require("camp/data")
 require("battle/Battle")
 require("camp/Camp")
 
 
+Camp.mode = "battle"
+
 function love.load(arg)
+
+  love.graphics.setFont(Menu.font)
 
   --- PROFILE CODE START
   --love.profiler = require('profile')
  -- love.profiler.start()
   --- PROFILE CODE END
 
+  -- default cursor
+  love.mouse.setCursor(Menu.mouse_2_cursor)
 
   if arg[1] then
     print("arg[1]: " .. arg[1])
@@ -21,8 +28,8 @@ function love.load(arg)
     return
   elseif Camp.mode == "battle" then
     local config = BattleConfig.new(
-      100,
-      100,
+      1000,
+      1000,
       nil, -- will crash
       nil, -- will crash
       9,
@@ -40,8 +47,21 @@ love.frame = 0
 --- PROFILE CODE END
 
 
-function love.update(dt)
+function love.mousepressed(x, y, button)
+    -- Use a custom cursor when the left mouse button is pressed.
+    if button == 1 then
+        love.mouse.setCursor(Menu.mouse_1_cursor)
+    end
+end
 
+function love.mousereleased(x, y, button)
+    -- Go back to the default cursor when the left mouse button is released.
+    if button == 1 then
+        love.mouse.setCursor(Menu.mouse_2_cursor)
+    end
+end
+
+function love.update(dt)
   if Camp.mode == "camp" then
     Camp.update(dt)
   else

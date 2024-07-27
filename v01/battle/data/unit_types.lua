@@ -15,7 +15,7 @@ do
   local shield_level = 0
   local armor_level = 0
   local batch_size = 25
-  local spawn_time = 10
+  local spawn_time = 2
   local number_of_command_groups = 4
 
   UnitTypes["Spearman"] = BattleUnitType.new(

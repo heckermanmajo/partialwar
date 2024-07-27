@@ -4,7 +4,11 @@ local UnitTypes = require("battle/data/unit_types")
 local last_spawn_cool_down = 0
 local mapping = {
   ["1"] = UnitTypes.Spearman,
-  -- todo: add more mappings
+  ["2"] = UnitTypes.Levy,
+  ["3"] = UnitTypes.Bowman,
+  ["4"] = UnitTypes.Swordsman,
+  ["5"] = UnitTypes.CrossBowman
+-- todo: add more mappings
 }
 
 --- Spawn groups of units based on the clicked number keys, if a chunk is selected.

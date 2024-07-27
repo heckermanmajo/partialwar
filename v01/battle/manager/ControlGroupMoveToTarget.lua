@@ -32,7 +32,7 @@ local function has_enemies_in_reach(control_group, Battle)
             (unit.y - enemy_unit.y) ^ 2
         )
 
-        if distance_to_enemy < 300 then
+        if distance_to_enemy < 600 then
           return true
         end
 
@@ -67,6 +67,9 @@ function ControlGroupMoveToTarget.update(Battle, dt)
       goto before_on_the_way -- jump to the movement part of the loop
     end
 
+    -- calculate the center of the control group
+    control_group:calculate_center()
+
     -- calculate the slowest unit speed
     control_group.slowest_unit_speed = 999999999
     for _, unit in ipairs(control_group.units) do
@@ -96,7 +99,7 @@ function ControlGroupMoveToTarget.update(Battle, dt)
           if unit.type.weapon.is_ranged then
             max_distance = unit.type.weapon.range
           else
-            max_distance = 300
+            max_distance = 600
           end
 
           if distance_to_target < max_distance then
@@ -169,6 +172,7 @@ function ControlGroupMoveToTarget.update(Battle, dt)
 
       if control_group.__last_checked == nil then control_group.__last_checked = 0 end
 
+      -- group continues to move towards the walk target if engagement has ended
       if control_group.__last_checked < 0 then
         if has_enemies_in_reach(control_group, Battle) then
           control_group.last_mode = "on_the_way"
@@ -187,24 +191,24 @@ function ControlGroupMoveToTarget.update(Battle, dt)
       end
 
       local distance_to_target = math.sqrt(
-        (control_group.center_x - control_group.target_chunk.x) ^ 2 +
-          (control_group.center_y - control_group.target_chunk.y) ^ 2
+        (control_group.center_x - control_group.walk_target_x) ^ 2 +
+          (control_group.center_y - control_group.walk_target_y) ^ 2
       )
 
-      if distance_to_target > 40 then
+      if distance_to_target > 40 then -- todo: do we need this ??
 
         local rotation = math.atan2(
-          control_group.target_chunk.y - control_group.center_y,
-          control_group.target_chunk.x - control_group.center_x
+          control_group.walk_target_y - control_group.center_y,
+          control_group.walk_target_x - control_group.center_x
         )
 
         local x_direction
         local y_direction
 
-        if control_group.center_x < control_group.target_chunk.x then x_direction = 1
+        if control_group.center_x < control_group.walk_target_x then x_direction = 1
         else x_direction = -1 end
 
-        if control_group.center_y < control_group.target_chunk.y then y_direction = 1
+        if control_group.center_y < control_group.walk_target_y then y_direction = 1
         else y_direction = -1 end
 
         local delta_x = x_direction * control_group.slowest_unit_speed * dt

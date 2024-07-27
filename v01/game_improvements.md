@@ -24,7 +24,6 @@ once a player has only one left.
 the battle is over and the army is lost.
 - make the spawn timer static: 5 seconds
 
-
 ## In Battle Group-Movement
 center the current position of the group 
 from time to time.
